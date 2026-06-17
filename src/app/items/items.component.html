@@ -1,0 +1,31 @@
+<div class="container">
+  <h2>Items List</h2>
+
+  <input
+    type="text"
+    placeholder="Search items..."
+    [(ngModel)]="searchText"
+    class="search-box"
+  />
+
+  <div class="items-grid">
+    <div class="item-card" *ngFor="let item of filteredItems">
+
+      <h3>{{ item.name }}</h3>
+      <p>₹{{ item.price }}</p>
+
+      <!-- ✅ Show qty only if added -->
+      <div class="qty" *ngIf="item.showQty">
+        <button (click)="decrease(item)">−</button>
+        <span>{{ item.quantity }}</span>
+        <button (click)="increase(item)">+</button>
+      </div>
+
+      <!-- ✅ Only show button initially -->
+      <button *ngIf="!item.showQty" (click)="addToCart(item)">
+        Add to Cart
+      </button>
+
+    </div>
+  </div>
+</div>

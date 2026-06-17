@@ -1,0 +1,61 @@
+<div class="cart-page">
+
+  <!-- Left: Items -->
+  <div class="cart-items">
+
+    <h2>Your Cart</h2>
+
+    <div *ngIf="cartItems.length === 0" class="empty">
+      No items in cart
+    </div>
+
+    <div *ngFor="let item of cartItems; trackBy: trackById" class="cart-item">
+
+      <!-- Left: Item Info -->
+      <div class="item-info">
+        <div class="item-name">{{ item.name }}</div>
+
+        <div class="qty">
+          <button (click)="decrease(item)">−</button>
+          <span>{{ item.quantity }}</span>
+          <button (click)="increase(item)">+</button>
+        </div>
+      </div>
+
+      <!-- Right: Price + Remove -->
+      <div class="item-actions">
+        <div class="item-price">
+          ₹{{ item.price * item.quantity }}
+        </div>
+
+        <button class="remove-btn" (click)="remove(item)">
+          Remove
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Right: Summary -->
+  <div class="cart-summary" *ngIf="cartItems.length > 0">
+
+    <h3>Order Summary</h3>
+
+    <div class="summary-row">
+      <span>Total Items</span>
+      <span>{{ cartService.getCount() }}</span>
+    </div>
+
+    <div class="summary-row total">
+      <span>Total</span>
+      <span>₹{{ getTotal() }}</span>
+    </div>
+
+    <button class="checkout-btn" (click)="checkout()">
+      Proceed to Checkout
+    </button>
+
+  </div>
+
+</div>

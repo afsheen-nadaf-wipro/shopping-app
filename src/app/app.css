@@ -1,0 +1,55 @@
+.toast {
+  position: fixed;
+  top: 90px;
+  right: 30px;
+
+  z-index: 9999;
+
+  min-width: 260px;
+  max-width: 320px;
+
+  padding: 14px 18px;
+  border-radius: 14px;
+
+  
+/* ✅ Font */
+  font-family: 'Inter', sans-serif;
+
+  /* ✅ Glass look */
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(18px);
+
+  border: 1px solid rgba(255,255,255,0.4);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+
+  /* ✅ Text */
+  color: #111;
+  font-size: 14px;
+  font-weight: 500;
+
+  /* ✅ Animation */
+  animation: toastSlide 2s ease forwards;
+}
+.toast-container {
+  position: fixed;
+  top: 90px;
+  right: 30px;
+  z-index: 9999;
+}
+@keyframes toastSlide {
+  0% {
+    opacity: 0;
+    transform: translateX(50px) scale(0.95);
+  }
+  15% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+}

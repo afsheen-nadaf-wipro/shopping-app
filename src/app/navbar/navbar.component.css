@@ -1,0 +1,125 @@
+/* Modern font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 14px 48px;
+
+  font-family: 'Inter', sans-serif;
+
+  /* ✅ Glass background */
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(18px);
+
+  /* ✅ subtle border + shadow */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+}
+
+/* Logo */
+.logo {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111;
+  letter-spacing: -0.2px;
+}
+
+/* Nav container */
+.nav-links {
+  display: flex;
+  gap: 28px;
+  list-style: none;
+}
+
+/* Links */
+.nav-links li a {
+  position: relative;
+  text-decoration: none;
+
+  font-size: 14px;
+  font-weight: 500;
+  color: #444;
+
+  padding: 6px 2px;
+  transition: all 0.25s ease;
+}
+
+/* Hover effect */
+.nav-links li a:hover {
+  color: #4f46e5;
+}
+
+/* Glassy pill hover (luxury effect) */
+.nav-links li a::before {
+  content: '';
+  position: absolute;
+  inset: -6px -10px;
+
+  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.15),
+    rgba(79, 70, 229, 0.1)
+  );
+
+  opacity: 0;
+  transform: scale(0.95);
+  transition: all 0.25s ease;
+}
+
+.nav-links li a:hover::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Click interaction */
+.nav-links li a:active {
+  transform: scale(0.95);
+}
+
+
+.nav-links li a.active {
+  color: #4f46e5;
+}
+
+/* active underline */
+.nav-links li a.active::after {
+  width: 100%;
+}
+
+.badge {
+  background: #4f46e5;
+  color: white;
+  font-size: 10px;
+  padding: 3px 7px;
+  border-radius: 20px;
+  margin-left: 6px;
+}
+
+.badge {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: white;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  padding: 3px 8px;
+  border-radius: 20px;
+
+  margin-left: 6px;
+
+  vertical-align: middle;
+}
+.center-logo {
+  width: 100%;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 600;
+}
