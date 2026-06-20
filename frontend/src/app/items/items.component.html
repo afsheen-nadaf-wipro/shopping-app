@@ -1,29 +1,54 @@
 <div class="container">
   <h2>Items List</h2>
 
+  <!-- Error Banner -->
+  <div *ngIf="errorMessage" class="error-banner">
+    <span>{{ errorMessage }}</span>
+    <button class="retry-btn" (click)="loadProducts()">Retry</button>
+  </div>
+
+  <!-- Search -->
   <input
+    *ngIf="!isLoading && !errorMessage"
     type="text"
     placeholder="Search items..."
     [(ngModel)]="searchText"
     class="search-box"
   />
 
-  <div class="items-grid">
+  <!-- Loading Skeleton -->
+  <div *ngIf="isLoading" class="items-grid">
+    <div class="item-card skeleton" *ngFor="let s of [1,2,3,4,5,6]">
+      <div class="skeleton-title"></div>
+      <div class="skeleton-text"></div>
+      <div class="skeleton-btn"></div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && !errorMessage && filteredItems.length === 0" class="empty-state">
+    <p>{{ searchText ? 'No products match your search.' : 'No products available.' }}</p>
+  </div>
+
+  <!-- Products Grid -->
+  <div *ngIf="!isLoading && !errorMessage" class="items-grid">
     <div class="item-card" *ngFor="let item of filteredItems">
 
-      <h3>{{ item.name }}</h3>
-      <p>₹{{ item.price }}</p>
+      <img *ngIf="item.image_url" [src]="item.image_url" [alt]="item.name" class="item-image" (error)="img.style.display='none'" #img />
 
-      <!-- ✅ Show qty only if added -->
+      <h3>{{ item.name }}</h3>
+      <p class="description">{{ item.description }}</p>
+      <p class="price">₹{{ item.price }}</p>
+      <p class="stock" [class.out-of-stock]="item.stock === 0">{{ item.stock > 0 ? 'In Stock' : 'Out of Stock' }}</p>
+
       <div class="qty" *ngIf="item.showQty">
         <button (click)="decrease(item)">−</button>
         <span>{{ item.quantity }}</span>
         <button (click)="increase(item)">+</button>
       </div>
 
-      <!-- ✅ Only show button initially -->
-      <button *ngIf="!item.showQty" (click)="addToCart(item)">
-        Add to Cart
+      <button class="add-btn" *ngIf="!item.showQty" (click)="addToCart(item)" [disabled]="item.stock === 0">
+        {{ item.stock === 0 ? 'Out of Stock' : 'Add to Cart' }}
       </button>
 
     </div>

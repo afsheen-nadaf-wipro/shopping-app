@@ -1,12 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
-/* Layout */
+/* ── Layout ───────────────────────────────────────────────────────────────── */
 .container {
   padding: 40px;
   font-family: 'Inter', sans-serif;
 }
 
-/* Title */
 h2 {
   text-align: center;
   margin-bottom: 30px;
@@ -14,19 +13,18 @@ h2 {
   color: #111;
 }
 
-/* Search */
+/* ── Search ───────────────────────────────────────────────────────────────── */
 .search-box {
+  display: block;
   width: 100%;
+  box-sizing: border-box;
   padding: 14px;
   border-radius: 12px;
   border: 1px solid #e5e7eb;
-
-  background: rgba(255,255,255,0.7);
-  backdrop-filter: blur(10px);
-
+  background: #fff;
   margin-bottom: 30px;
   font-size: 14px;
-
+  font-family: 'Inter', sans-serif;
   transition: all 0.25s ease;
 }
 
@@ -34,79 +32,90 @@ h2 {
   outline: none;
   border-color: #6366f1;
   box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
-  background: rgba(255,255,255,0.9);
 }
 
-/* Grid */
+/* ── Grid ─────────────────────────────────────────────────────────────────── */
 .items-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
   gap: 28px;
 }
 
-/* Card */
+/* ── Card ─────────────────────────────────────────────────────────────────── */
 .item-card {
   position: relative;
-
-  background: rgba(255,255,255,0.65);
-  backdrop-filter: blur(16px);
-
+  background: #ffffff;
   padding: 22px;
   border-radius: 20px;
-
-  border: 1px solid rgba(255,255,255,0.35);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.06);
-
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
   text-align: left;
-
   transition: all 0.3s ease;
+  overflow: hidden;
 }
 
-/* Accent top border */
-.item-card::after {
+.item-card::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
-
   width: 100%;
   height: 3px;
-
-  border-radius: 20px 20px 0 0;
-  background: linear-gradient(90deg, #6366f1, transparent);
-  opacity: 0.5;
+  background: linear-gradient(90deg, #6366f1, #a5b4fc);
 }
 
-/* Hover effect */
 .item-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 25px 50px rgba(0,0,0,0.1);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.1);
 }
 
-/* Title inside card */
+/* ── Card content ─────────────────────────────────────────────────────────── */
 .item-card h3 {
   font-size: 16px;
   font-weight: 600;
   color: #111;
-  margin-bottom: 6px;
+  margin: 0 0 6px 0;
 }
 
-/* Price */
-.item-card p {
-  font-size: 14px;
-  color: #6b7280;
-  margin-bottom: 10px;
+.item-card .description {
+  font-size: 12px;
+  color: #9ca3af;
+  margin: 0 0 6px 0;
 }
 
-/* Quantity Controls */
+.item-card .price {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111;
+  margin: 0 0 4px 0;
+}
+
+.item-card .stock {
+  font-size: 12px;
+  color: #16a34a;
+  margin: 0 0 14px 0;
+}
+
+.item-card .stock.out-of-stock {
+  color: #dc2626;
+}
+
+/* ── Product image ────────────────────────────────────────────────────────── */
+.item-image {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+/* ── Quantity controls ────────────────────────────────────────────────────── */
 .qty {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  margin: 12px 0;
-
-  background: rgba(0,0,0,0.05);
+  margin: 0 0 10px 0;
+  background: #f3f4f6;
   padding: 6px 10px;
   border-radius: 10px;
 }
@@ -114,22 +123,17 @@ h2 {
 .qty button {
   width: 28px;
   height: 28px;
-
+  padding: 0;
   border-radius: 8px;
   border: none;
-
-  background: rgba(99, 102, 241, 0.1);  /* ✅ visible light indigo */
-  color: #4f46e5;                      /* ✅ strong icon color */
-
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-
-  cursor: pointer;
+  background: rgba(99,102,241,0.1);
+  color: #4f46e5;
   font-weight: 600;
-
+  font-size: 16px;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-
   transition: all 0.2s ease;
 }
 
@@ -144,75 +148,109 @@ h2 {
   color: #111;
 }
 
-/* Button */
-button {
+/* ── Add to cart button ───────────────────────────────────────────────────── */
+.item-card .add-btn {
+  display: block;
   width: 100%;
-
   padding: 10px 14px;
   border-radius: 12px;
-
+  border: none;
   background: linear-gradient(135deg, #6366f1, #4f46e5);
   color: white;
-
   font-weight: 500;
   font-size: 13px;
-
-  border: none;
+  font-family: 'Inter', sans-serif;
   cursor: pointer;
-
   transition: all 0.25s ease;
 }
 
-button:hover {
+.item-card .add-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 10px 25px rgba(79,70,229,0.3);
+  box-shadow: 0 8px 20px rgba(79,70,229,0.3);
 }
 
-button:active {
-  transform: scale(0.96);
+.item-card .add-btn:disabled {
+  background: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
-/* ✅ Premium Floating Toast */
+/* ── Error banner ─────────────────────────────────────────────────────────── */
+.error-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  padding: 14px 18px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  font-size: 14px;
+}
+
+.retry-btn {
+  display: inline-block;
+  width: auto;
+  padding: 6px 16px;
+  font-size: 13px;
+  border-radius: 8px;
+  border: none;
+  background: #b91c1c;
+  color: white;
+  cursor: pointer;
+}
+
+/* ── Empty state ──────────────────────────────────────────────────────────── */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #9ca3af;
+  font-size: 15px;
+}
+
+/* ── Skeleton ─────────────────────────────────────────────────────────────── */
+.skeleton-title,
+.skeleton-text,
+.skeleton-btn {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: 8px;
+}
+
+.skeleton-title { height: 18px; width: 60%; margin-bottom: 12px; }
+.skeleton-text  { height: 14px; width: 80%; margin-bottom: 20px; }
+.skeleton-btn   { height: 38px; width: 100%; }
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Toast ────────────────────────────────────────────────────────────────── */
 .toast {
   position: fixed;
   top: 80px;
   right: 30px;
   z-index: 999;
-
   min-width: 260px;
   max-width: 320px;
-
   padding: 14px 18px;
   border-radius: 14px;
-
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(18px);
-
-  border: 1px solid rgba(255,255,255,0.4);
-  box-shadow: 0 15px 40px rgba(0,0,0,0.12);
-
-  color: #111;
+  background: #1f2937;
+  color: #fff;
   font-size: 14px;
   font-weight: 500;
-
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
   animation: toastSlide 2.5s ease forwards;
 }
 
-/* Toast animation */
 @keyframes toastSlide {
-  0% {
-    opacity: 0;
-    transform: translateX(40px) scale(0.95);
-  }
-  15% {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-  }
-  85% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-    transform: translateX(20px);
-  }
+  0%   { opacity: 0; transform: translateX(40px); }
+  15%  { opacity: 1; transform: translateX(0); }
+  85%  { opacity: 1; }
+  100% { opacity: 0; transform: translateX(20px); }
 }

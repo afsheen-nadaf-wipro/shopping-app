@@ -1,15 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Subject, takeUntil } from 'rxjs';
 import { CartService } from '../cart.service';
-
-type Item = {
-  id: number;
-  name: string;
-  price: number;
-  quantity?: number;
-  showQty?: boolean;
-};
+import { ProductService } from '../services/product.service';
+import { Product } from '../models/product.model';
 
 @Component({
   selector: 'app-items',
@@ -18,73 +13,93 @@ type Item = {
   templateUrl: './items.component.html',
   styleUrls: ['./items.component.css']
 })
-export class ItemsComponent implements OnInit {
+export class ItemsComponent implements OnInit, OnDestroy {
+  searchText = '';
+  items: Product[] = [];
+  isLoading = true;
+  errorMessage = '';
 
-  searchText: string = '';
+  private destroy$ = new Subject<void>();
 
-  constructor(public cartService: CartService) {}
+  constructor(
+    public cartService: CartService,
+    private productService: ProductService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
-  items: Item[] = [
-    { id: 1, name: 'Laptop', price: 50000 },
-    { id: 2, name: 'Phone', price: 20000 },
-    { id: 3, name: 'Headphones', price: 2000 },
-    { id: 4, name: 'Keyboard', price: 1500 },
-    { id: 5, name: 'Mouse', price: 800 }
-  ];
-
-  ngOnInit() {
-    this.syncWithCart();
+  ngOnInit(): void {
+    this.loadProducts();
   }
 
-  syncWithCart() {
-    this.items.forEach(item => {
-      const cartItem = this.cartService.getItemById(item.id);
+  loadProducts(): void {
+    this.isLoading = true;
+    this.errorMessage = '';
 
-      if (cartItem) {
-        item.quantity = cartItem.quantity;
-        item.showQty = true;
-      } else {
-        item.quantity = 0;
-        item.showQty = false;
-      }
+    this.productService.getProducts()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (products) => {
+          this.isLoading = false;
+          this.items = this.syncWithCart(products);
+          this.cdr.markForCheck();
+        },
+        error: (err) => {
+          this.isLoading = false;
+          this.errorMessage = err.status === 0
+            ? 'Cannot reach the server. Please check your connection.'
+            : 'Failed to load products. Please try again.';
+          this.cdr.markForCheck();
+        }
+      });
+  }
+
+  private syncWithCart(products: Product[]): Product[] {
+    return products.map(product => {
+      const cartItem = this.cartService.getItemById(product.id);
+      return cartItem
+        ? { ...product, quantity: cartItem.quantity, showQty: true }
+        : { ...product, quantity: 0, showQty: false };
     });
   }
 
-  get filteredItems() {
+  get filteredItems(): Product[] {
     return this.items.filter(item =>
       item.name.toLowerCase().includes(this.searchText.toLowerCase())
     );
   }
 
-  addToCart(item: Item) {
+  addToCart(item: Product): void {
+    this.cartService.addItem(item);
     item.quantity = 1;
     item.showQty = true;
-
-    this.cartService.addToCart(item);
     this.cartService.setToast(`${item.name} added ✅`);
   }
 
-  increase(item: Item) {
-    item.quantity = (item.quantity || 0) + 1;
-
-    this.cartService.addToCart(item);
-    this.cartService.setToast(`${item.name} updated ✅`);
+  increase(item: Product): void {
+    const added = this.cartService.increaseItem(item.id);
+    if (added) {
+      item.quantity = (item.quantity || 0) + 1;
+      this.cartService.setToast(`${item.name} updated ✅`);
+    } else {
+      this.cartService.setToast(`⚠️ Only ${item.stock} in stock`);
+    }
   }
 
-  decrease(item: Item) {
+  decrease(item: Product): void {
     if (item.quantity === 1) {
-      // ✅ remove item completely
       this.cartService.removeItem(item.id);
-
       item.quantity = 0;
       item.showQty = false;
-
       this.cartService.setToast(`${item.name} removed ❌`);
     } else if (item.quantity && item.quantity > 1) {
+      this.cartService.decreaseItem(item.id);
       item.quantity--;
-
-      this.cartService.addToCart(item);
       this.cartService.setToast(`${item.name} updated ✅`);
     }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

@@ -20,8 +20,10 @@
       placeholder="Enter password"
     />
 
-    <button type="submit">Login</button>
+    <button type="submit" [disabled]="isLoading">
+      {{ isLoading ? 'Logging in...' : 'Login' }}
+    </button>
 
-    <p *ngIf="message" class="message">{{ message }}</p>
+    <p *ngIf="errorMessage" class="message error">{{ errorMessage }}</p>
   </form>
 </div>

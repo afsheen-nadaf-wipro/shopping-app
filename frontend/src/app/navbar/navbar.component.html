@@ -25,7 +25,10 @@
         </a>
       </li>
       <li>
-        <a routerLink = "/">Log Out</a>
+        <span class="user-name" *ngIf="currentUser">Hi, {{ currentUser.name }}</span>
+      </li>
+      <li>
+        <button class="logout-btn" (click)="logout()">Log Out</button>
       </li>
     </ul>
 

@@ -1,6 +1,7 @@
 import logging
 import os
 from flask import Flask
+from flask_cors import CORS
 from routes.auth import auth_bp
 from routes.products import products_bp
 from routes.orders import orders_bp
@@ -11,6 +12,9 @@ logging.basicConfig(
 )
 
 app = Flask(__name__)
+
+CORS(app, resources={r"/*": {"origins": os.getenv("ALLOWED_ORIGINS", "http://localhost:4200")}})
+
 app.register_blueprint(auth_bp)
 app.register_blueprint(products_bp)
 app.register_blueprint(orders_bp)

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -11,19 +11,31 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
+  email = '';
+  password = '';
+  errorMessage = '';
+  isLoading = false;
 
-  email: string = '';
-  password: string = '';
-  message: string = '';
-
-  constructor(private router: Router) {}
+  constructor(private authService: AuthService) {}
 
   onLogin() {
-    if (this.email === 'admin@example.com' && this.password === '123456') {
-      this.message = 'Login successful!';
-      this.router.navigate(['/items']); // ✅ redirect
-    } else {
-      this.message = 'Invalid credentials';
-    }
+    this.errorMessage = '';
+    this.isLoading = true;
+
+    this.authService.login({ email: this.email, password: this.password }).subscribe({
+      next: () => {
+        // Navigation handled inside AuthService
+      },
+      error: (err) => {
+        this.isLoading = false;
+        if (err.status === 0) {
+          this.errorMessage = 'Cannot reach the server. Please check your connection.';
+        } else if (err.status === 401 || err.status === 400) {
+          this.errorMessage = err.error?.message ?? 'Invalid email or password.';
+        } else {
+          this.errorMessage = 'An unexpected error occurred. Please try again.';
+        }
+      }
+    });
   }
 }
