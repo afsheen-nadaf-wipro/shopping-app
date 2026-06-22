@@ -1,0 +1,15 @@
+.orders-container {
+  padding: 20px;
+}
+
+.order-card {
+  background: white;
+  color: black;
+  border: 1px solid black;
+  margin: 10px 0;
+  padding: 15px;
+}
+
+.status {
+  color: blue;
+}

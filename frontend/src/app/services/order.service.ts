@@ -11,8 +11,9 @@ export interface CheckoutRequest {
   items: CheckoutItem[];
 }
 
-export interface OrderDetail {
+export interface Order {
   id: number;
+  user_id: number;
   total_amount: number;
   status: string;
   created_at: string;
@@ -20,14 +21,30 @@ export interface OrderDetail {
 
 export interface CheckoutResponse {
   message: string;
-  order: OrderDetail;
+  order: Order;
 }
 
-@Injectable({ providedIn: 'root' })
+export interface OrdersResponse {
+  orders: Order[];
+}
+
+@Injectable({
+  providedIn: 'root'
+})
 export class OrderService {
+
   constructor(private api: ApiService) {}
 
   checkout(request: CheckoutRequest): Observable<CheckoutResponse> {
-    return this.api.post<CheckoutResponse>('/orders/checkout', request);
+    return this.api.post<CheckoutResponse>(
+      '/orders/checkout',
+      request
+    );
+  }
+
+  getOrders(): Observable<OrdersResponse> {
+    return this.api.get<OrdersResponse>(
+      '/orders'
+    );
   }
 }
