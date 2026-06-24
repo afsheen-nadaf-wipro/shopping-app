@@ -1,6 +1,5 @@
 <div class="cart-page">
 
-  <!-- Success Panel -->
   <div *ngIf="placedOrderId" class="success-panel">
     <div class="success-icon">✅</div>
     <h2>Order Placed!</h2>
@@ -10,10 +9,13 @@
 
   <div *ngIf="!placedOrderId" class="cart-grid">
 
-    <!-- Left: Items -->
     <div class="cart-items">
 
-      <h2>Your Cart</h2>
+      <header class="page-header">
+        <p class="eyebrow">Cart</p>
+        <h2>Your bag</h2>
+        <p class="page-copy">Adjust quantities, confirm your total, and place your order with a clear review of every item.</p>
+      </header>
 
       <div *ngIf="cartItems.length === 0" class="empty">
         Your cart is empty.
@@ -37,16 +39,10 @@
         </div>
 
       </div>
-
-      <!-- Error -->
       <div *ngIf="orderError" class="order-error">{{ orderError }}</div>
-
-      <!-- Toast -->
-      <div *ngIf="cartService.toastMessage" class="toast">{{ cartService.toastMessage }}</div>
 
     </div>
 
-    <!-- Right: Summary -->
     <div class="cart-summary" *ngIf="cartItems.length > 0">
 
       <h3>Order Summary</h3>

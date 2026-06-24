@@ -1,22 +1,25 @@
-<div class="container">
-  <h2>Items List</h2>
+<section class="catalog-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Shop</p>
+      <h2>Browse the collection</h2>
+      <p class="page-copy">Handpicked essentials, clear stock visibility, and quick cart actions from one calm shopping surface.</p>
+    </div>
+  </header>
 
-  <!-- Error Banner -->
   <div *ngIf="errorMessage" class="error-banner">
     <span>{{ errorMessage }}</span>
     <button class="retry-btn" (click)="loadProducts()">Retry</button>
   </div>
 
-  <!-- Search -->
   <input
     *ngIf="!isLoading && !errorMessage"
     type="text"
-    placeholder="Search items..."
+    placeholder="Search products, categories, or brands"
     [(ngModel)]="searchText"
     class="search-box"
   />
 
-  <!-- Loading Skeleton -->
   <div *ngIf="isLoading" class="items-grid">
     <div class="item-card skeleton" *ngFor="let s of [1,2,3,4,5,6]">
       <div class="skeleton-title"></div>
@@ -25,17 +28,13 @@
     </div>
   </div>
 
-  <!-- Empty State -->
   <div *ngIf="!isLoading && !errorMessage && filteredItems.length === 0" class="empty-state">
     <p>{{ searchText ? 'No products match your search.' : 'No products available.' }}</p>
   </div>
 
-  <!-- Products Grid -->
   <div *ngIf="!isLoading && !errorMessage" class="items-grid">
     <div class="item-card" *ngFor="let item of filteredItems">
-
       <img *ngIf="item.image_url" [src]="item.image_url" [alt]="item.name" class="item-image" (error)="img.style.display='none'" #img />
-
       <h3>{{ item.name }}</h3>
       <p class="description">{{ item.description }}</p>
       <p class="price">₹{{ item.price }}</p>
@@ -50,7 +49,6 @@
       <button class="add-btn" *ngIf="!item.showQty" (click)="addToCart(item)" [disabled]="item.stock === 0">
         {{ item.stock === 0 ? 'Out of Stock' : 'Add to Cart' }}
       </button>
-
     </div>
   </div>
-</div>
+</section>

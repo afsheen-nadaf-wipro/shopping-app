@@ -303,6 +303,78 @@ def get_user_orders(user_id):
     return [_serialize_order(r) for r in rows]
 
 
+def get_user_order_history(user_id):
+    """
+    Returns all orders for a user with nested purchased items.
+    Results are sorted newest first and include order history fields
+    tailored for the customer-facing history page.
+    """
+    conn = None
+    cursor = None
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT
+                o.id,
+                o.total_amount,
+                o.status,
+                o.created_at,
+                p.name,
+                oi.quantity,
+                oi.price
+            FROM orders o
+            LEFT JOIN order_items oi ON oi.order_id = o.id
+            LEFT JOIN products p ON p.id = oi.product_id
+            WHERE o.user_id = %s
+            ORDER BY o.created_at DESC, o.id DESC, oi.id ASC
+            """,
+            (user_id,)
+        )
+        rows = cursor.fetchall()
+    except psycopg2.Error as e:
+        logger.error(
+            "psycopg2 error during get_user_order_history: %s",
+            e,
+            exc_info=True,
+        )
+        raise ServiceError("A server error occurred during fetching order history")
+    except RuntimeError as e:
+        logger.error("Connection error during get_user_order_history: %s", e)
+        raise ServiceError("Could not connect to the database")
+    finally:
+        close(conn, cursor)
+
+    orders = []
+    orders_by_id = {}
+
+    for row in rows:
+        order_id = row[0]
+        order = orders_by_id.get(order_id)
+        if order is None:
+            order = {
+                "order_id": order_id,
+                "total_amount": round(float(row[1]), 2),
+                "status": row[2],
+                "created_at": row[3].isoformat(),
+                "items": [],
+            }
+            orders_by_id[order_id] = order
+            orders.append(order)
+
+        if row[4] is not None:
+            order["items"].append(
+                {
+                    "product_name": row[4],
+                    "quantity": row[5],
+                    "price_at_purchase": round(float(row[6]), 2),
+                }
+            )
+
+    return orders
+
+
 def get_order_by_id(order_id, requesting_user_id, is_admin):
     """
     Returns a single order with its items.

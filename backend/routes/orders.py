@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify, g
 from middleware.auth_middleware import token_required, admin_required
 from services.order_service import (
     validate_checkout_input, place_order,
-    get_user_orders, get_order_by_id,
+    get_user_orders, get_user_order_history, get_order_by_id,
     update_order_status, get_admin_orders, get_admin_order_detail,
     VALID_STATUSES,
 )
@@ -42,6 +42,17 @@ def checkout():
 def list_orders():
     try:
         orders = get_user_orders(int(g.current_user["id"]))
+    except ServiceError as e:
+        return jsonify({"error": str(e)}), 500
+
+    return jsonify({"orders": orders}), 200
+
+
+@orders_bp.route("/my-orders", methods=["GET"])
+@token_required
+def list_my_orders():
+    try:
+        orders = get_user_order_history(int(g.current_user["id"]))
     except ServiceError as e:
         return jsonify({"error": str(e)}), 500
 

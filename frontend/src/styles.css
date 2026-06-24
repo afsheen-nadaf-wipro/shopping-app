@@ -1,1 +1,62 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+	--font-body: 'Trebuchet MS', 'Segoe UI', Arial, sans-serif;
+	--font-display: 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+	--color-bg: #f6efe6;
+	--color-surface: rgba(255, 251, 246, 0.88);
+	--color-surface-strong: #fffaf4;
+	--color-border: rgba(29, 54, 52, 0.12);
+	--color-text: #17312f;
+	--color-muted: #677572;
+	--color-primary: #1a6b63;
+	--color-primary-strong: #134c46;
+	--color-primary-soft: rgba(26, 107, 99, 0.12);
+	--color-accent: #c96f4a;
+	--color-accent-strong: #ab5938;
+	--color-danger: #b3493b;
+	--shadow-soft: 0 18px 45px rgba(28, 42, 42, 0.08);
+	--shadow-float: 0 24px 60px rgba(17, 39, 37, 0.12);
+	--radius-card: 24px;
+}
+
+html {
+	min-height: 100%;
+	background:
+		radial-gradient(circle at top left, rgba(201, 111, 74, 0.12), transparent 28%),
+		radial-gradient(circle at top right, rgba(26, 107, 99, 0.12), transparent 26%),
+		linear-gradient(180deg, #f8f2ea 0%, #f4eee7 40%, #edf3f2 100%);
+}
+
+body {
+	margin: 0;
+	min-height: 100vh;
+	font-family: var(--font-body);
+	color: var(--color-text);
+	background: transparent;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+button,
+input,
+textarea,
+select {
+	font: inherit;
+}
+
+button {
+	cursor: pointer;
+}
+
+h1,
+h2,
+h3,
+h4 {
+	font-family: var(--font-display);
+	letter-spacing: -0.02em;
+}
+
+a {
+	color: inherit;
+}

@@ -8,6 +8,12 @@ export interface LoginRequest {
   password: string;
 }
 
+export interface RegisterRequest {
+  name: string;
+  email: string;
+  password: string;
+}
+
 export interface AuthUser {
   id: number;
   name: string;
@@ -16,6 +22,11 @@ export interface AuthUser {
 
 export interface LoginResponse {
   token: string;
+  user: AuthUser;
+}
+
+export interface RegisterResponse {
+  message: string;
   user: AuthUser;
 }
 
@@ -37,6 +48,10 @@ export class AuthService {
         this.router.navigate(['/items']);
       })
     );
+  }
+
+  register(payload: RegisterRequest): Observable<RegisterResponse> {
+    return this.api.post<RegisterResponse>('/auth/register', payload);
   }
 
   getToken(): string | null {

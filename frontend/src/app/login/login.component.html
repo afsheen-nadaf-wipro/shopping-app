@@ -1,29 +1,128 @@
-<div class="login-container">
-  <form (ngSubmit)="onLogin()">
-    <h2>Login</h2>
+<section class="auth-page">
+  <div class="auth-shell">
+    <aside class="brand-panel">
+      <p class="eyebrow">BOUTIQUE CART</p>
+      <h1>Curated shopping with a calm, premium checkout flow.</h1>
+      <p class="brand-copy">
+        Browse beautifully, manage your cart with confidence, and keep every order in one polished account space.
+      </p>
 
-    <label>Email</label>
-    <input
-      type="email"
-      [(ngModel)]="email"
-      name="email"
-      required
-      placeholder="Enter email"
-    />
+      <div class="feature-list" aria-hidden="true">
+        <div>
+          <span class="feature-kicker">Fast</span>
+          <p>Streamlined cart and checkout experience.</p>
+        </div>
+        <div>
+          <span class="feature-kicker">Trusted</span>
+          <p>Secure account access with order tracking.</p>
+        </div>
+        <div>
+          <span class="feature-kicker">Personal</span>
+          <p>A clean account area designed for repeat shoppers.</p>
+        </div>
+      </div>
+    </aside>
 
-    <label>Password</label>
-    <input
-      type="password"
-      [(ngModel)]="password"
-      name="password"
-      required
-      placeholder="Enter password"
-    />
+    <div class="auth-card">
+      <div class="auth-toggle" role="tablist" aria-label="Authentication mode">
+        <button type="button" [class.active]="!isCreateAccount" (click)="toggleMode(false)">Sign in</button>
+        <button type="button" [class.active]="isCreateAccount" (click)="toggleMode(true)">Create account</button>
+      </div>
 
-    <button type="submit" [disabled]="isLoading">
-      {{ isLoading ? 'Logging in...' : 'Login' }}
-    </button>
+      <form class="auth-form" #authForm="ngForm" novalidate (ngSubmit)="onSubmit(authForm)">
+        <div>
+          <p class="form-overline">{{ isCreateAccount ? 'New customer' : 'Welcome back' }}</p>
+          <h2>{{ isCreateAccount ? 'Create your account' : 'Sign in to continue' }}</h2>
+          <p class="form-copy">
+            {{ isCreateAccount ? 'Set up your profile and start ordering in a few seconds.' : 'Use your account to manage your cart and review past orders.' }}
+          </p>
+        </div>
 
-    <p *ngIf="errorMessage" class="message error">{{ errorMessage }}</p>
-  </form>
-</div>
+        <label *ngIf="isCreateAccount">
+          Full name
+          <input
+            type="text"
+            [(ngModel)]="name"
+            #nameModel="ngModel"
+            name="name"
+            required
+            placeholder="Aarav Patel"
+          />
+          @if ((submitAttempted || nameModel.touched) && nameModel.errors?.['required']) {
+            <span class="field-error">Name is required.</span>
+          }
+        </label>
+
+        <label>
+          Email address
+          <input
+            type="email"
+            [(ngModel)]="email"
+            #emailModel="ngModel"
+            name="email"
+            required
+            placeholder="you@example.com"
+            email
+          />
+          @if ((submitAttempted || emailModel.touched) && emailModel.errors?.['required']) {
+            <span class="field-error">Email is required.</span>
+          }
+          @if ((submitAttempted || emailModel.touched) && emailModel.errors?.['email']) {
+            <span class="field-error">Enter a valid email address.</span>
+          }
+        </label>
+
+        <label>
+          Password
+          <input
+            type="password"
+            [(ngModel)]="password"
+            #passwordModel="ngModel"
+            name="password"
+            required
+            placeholder="Enter your password"
+            minlength="6"
+          />
+          @if ((submitAttempted || passwordModel.touched) && passwordModel.errors?.['required']) {
+            <span class="field-error">Password is required.</span>
+          }
+          @if ((submitAttempted || passwordModel.touched) && passwordModel.errors?.['minlength']) {
+            <span class="field-error">Password must be at least 6 characters.</span>
+          }
+        </label>
+
+        <label *ngIf="isCreateAccount">
+          Confirm password
+          <input
+            type="password"
+            [(ngModel)]="confirmPassword"
+            #confirmPasswordModel="ngModel"
+            name="confirmPassword"
+            required
+            placeholder="Repeat your password"
+          />
+          @if ((submitAttempted || confirmPasswordModel.touched) && confirmPasswordModel.errors?.['required']) {
+            <span class="field-error">Please confirm your password.</span>
+          }
+          @if ((submitAttempted || confirmPasswordModel.touched) && confirmPassword && password !== confirmPassword) {
+            <span class="field-error">Passwords do not match.</span>
+          }
+        </label>
+
+        <button type="submit" class="submit-button" [disabled]="isLoading">
+          {{ isLoading ? (isCreateAccount ? 'Creating account...' : 'Signing in...') : (isCreateAccount ? 'Create account' : 'Sign in') }}
+        </button>
+
+        <p class="switch-copy">
+          {{ isCreateAccount ? 'Already have an account?' : "Don't have an account?" }}
+          <button type="button" class="inline-link" (click)="toggleMode(!isCreateAccount)">
+            {{ isCreateAccount ? 'Sign in here' : 'Create one' }}
+          </button>
+        </p>
+
+        <p *ngIf="successMessage" class="message success">{{ successMessage }}</p>
+        <p *ngIf="errorMessage" class="message error">{{ errorMessage }}</p>
+      </form>
+    </div>
+  </div>
+</section>

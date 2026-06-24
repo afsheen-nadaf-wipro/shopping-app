@@ -1,22 +1,67 @@
-<div class="orders-container">
+<section class="orders-page" aria-labelledby="order-history-heading">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">Account</p>
+      <h1 id="order-history-heading">Order History</h1>
+      <p class="page-copy">Review your latest purchases, delivery status, and item totals in one place.</p>
+    </div>
+  </header>
 
-  <h1>My Orders</h1>
+  @if (loading()) {
+    <div class="state-card" aria-live="polite">
+      <div class="spinner" aria-hidden="true"></div>
+      <p>Loading your orders...</p>
+    </div>
+  } @else if (errorMessage()) {
+    <div class="state-card error" aria-live="assertive">
+      <h2>Unable to load orders</h2>
+      <p>{{ errorMessage() }}</p>
+      <button type="button" class="retry-button" (click)="loadOrders()">Try again</button>
+    </div>
+  } @else if (!hasOrders()) {
+    <div class="state-card empty" aria-live="polite">
+      <h2>No orders yet</h2>
+      <p>Once you place an order, it will appear here with its items and current status.</p>
+    </div>
+  } @else {
+    <div class="orders-grid">
+      @for (order of orders(); track trackOrder($index, order)) {
+        <article class="order-card">
+          <div class="order-card__header">
+            <div>
+              <p class="order-label">Order</p>
+              <h2>#{{ order.order_id }}</h2>
+            </div>
+            <span class="status-badge">{{ order.status }}</span>
+          </div>
 
-  <p>Loading: {{ loading }}</p>
+          <dl class="order-meta">
+            <div>
+              <dt>Date</dt>
+              <dd>{{ order.created_at | date: 'medium' }}</dd>
+            </div>
+            <div>
+              <dt>Total</dt>
+              <dd>{{ order.total_amount | currency: 'INR' : 'symbol' : '1.2-2' }}</dd>
+            </div>
+          </dl>
 
-  <p>Orders Count: {{ orders.length }}</p>
-
-  <div
-    class="order-card"
-    *ngFor="let order of orders"
-  >
-    <h3>Order #{{ order.id }}</h3>
-
-    <p>Status: {{ order.status }}</p>
-
-    <p>Total: ₹{{ order.total_amount }}</p>
-
-    <p>Date: {{ order.created_at }}</p>
-  </div>
-
-</div>
+          <div class="items-section">
+            <h3>Items</h3>
+            <ul class="items-list">
+              @for (item of order.items; track item.product_name + '-' + $index) {
+                <li>
+                  <div>
+                    <p class="item-name">{{ item.product_name }}</p>
+                    <p class="item-qty">Qty: {{ item.quantity }}</p>
+                  </div>
+                  <p class="item-price">{{ item.price_at_purchase | currency: 'INR' : 'symbol' : '1.2-2' }}</p>
+                </li>
+              }
+            </ul>
+          </div>
+        </article>
+      }
+    </div>
+  }
+</section>

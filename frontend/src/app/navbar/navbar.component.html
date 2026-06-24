@@ -1,33 +1,31 @@
 <nav class="navbar">
-
-  <!-- ✅ LOGIN STATE (centered logo only) -->
   <div *ngIf="isLoginPage" class="center-logo">
-    Shopping App
+    <span>Boutique Cart</span>
   </div>
 
-  <!-- ✅ AFTER LOGIN (full navbar exactly like yours) -->
   <ng-container *ngIf="!isLoginPage">
-
-    <div class="logo">Shopping App</div>
+    <div class="logo">
+      <span class="logo-mark">BC</span>
+      <div>
+        <strong>Boutique Cart</strong>
+        <small>Curated daily essentials</small>
+      </div>
+    </div>
 
     <ul class="nav-links">
       <li>
         <a routerLink="/items" routerLinkActive="active">Items</a>
       </li>
-
       <li>
         <a routerLink="/cart" routerLinkActive="active">
           Cart
-          <!-- ✅ FIX: use *ngIf (you missed the *) -->
           <span class="badge" *ngIf="cartService.getCount() > 0">
             {{ cartService.getCount() }}
           </span>
         </a>
       </li>
       <li>
-        <a routerLink="/orders">
-          My Orders
-        </a>
+        <a routerLink="/orders" routerLinkActive="active">My Orders</a>
       </li>
       <li>
         <span class="user-name" *ngIf="currentUser">Hi, {{ currentUser.name }}</span>
@@ -36,7 +34,5 @@
         <button class="logout-btn" (click)="logout()">Log Out</button>
       </li>
     </ul>
-
   </ng-container>
-
 </nav>

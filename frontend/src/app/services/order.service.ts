@@ -19,6 +19,20 @@ export interface Order {
   created_at: string;
 }
 
+export interface OrderHistoryItem {
+  product_name: string;
+  quantity: number;
+  price_at_purchase: number;
+}
+
+export interface OrderHistoryOrder {
+  order_id: number;
+  total_amount: number;
+  status: string;
+  created_at: string;
+  items: OrderHistoryItem[];
+}
+
 export interface CheckoutResponse {
   message: string;
   order: Order;
@@ -26,6 +40,10 @@ export interface CheckoutResponse {
 
 export interface OrdersResponse {
   orders: Order[];
+}
+
+export interface OrderHistoryResponse {
+  orders: OrderHistoryOrder[];
 }
 
 @Injectable({
@@ -45,6 +63,12 @@ export class OrderService {
   getOrders(): Observable<OrdersResponse> {
     return this.api.get<OrdersResponse>(
       '/orders'
+    );
+  }
+
+  getMyOrders(): Observable<OrderHistoryResponse> {
+    return this.api.get<OrderHistoryResponse>(
+      '/orders/my-orders'
     );
   }
 }
