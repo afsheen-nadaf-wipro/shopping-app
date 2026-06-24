@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiBaseUrl: 'https://your-production-domain.com'
+  apiBaseUrl: 'https://boutique-app-321s.onrender.com'
 };
