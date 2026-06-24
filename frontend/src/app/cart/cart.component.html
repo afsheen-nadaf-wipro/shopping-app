@@ -2,8 +2,8 @@
 
   <div *ngIf="placedOrderId" class="success-panel">
     <div class="success-icon">✅</div>
-    <h2>Order Placed!</h2>
-    <p>Your order <strong>#{{ placedOrderId }}</strong> has been placed successfully.</p>
+    <h2>Order placed</h2>
+    <p>Your order <strong>#{{ placedOrderId }}</strong> is confirmed and ready for its next update.</p>
     <button class="continue-btn" (click)="continueShopping()">Continue Shopping</button>
   </div>
 
@@ -18,7 +18,7 @@
       </header>
 
       <div *ngIf="cartItems.length === 0" class="empty">
-        Your cart is empty.
+        Your boutique bag is empty.
       </div>
 
       <div *ngFor="let item of cartItems; trackBy: trackById" class="cart-item">

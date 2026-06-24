@@ -1,11 +1,17 @@
 <section class="catalog-page">
   <header class="page-header">
     <div>
-      <p class="eyebrow">Shop</p>
-      <h2>Browse the collection</h2>
-      <p class="page-copy">Handpicked essentials, clear stock visibility, and quick cart actions from one calm shopping surface.</p>
+      <p class="eyebrow">Boutique Collections</p>
+      <h2>Curated fashion and lifestyle pieces</h2>
+      <p class="page-copy">Explore women's fashion, handbags, jewelry, shoes, beauty, fragrances, and lifestyle accessories in a polished shopping experience.</p>
     </div>
   </header>
+
+  <div class="category-strip" aria-label="Product categories">
+    @for (category of categories; track category) {
+      <span class="category-chip">{{ category }}</span>
+    }
+  </div>
 
   <div *ngIf="errorMessage" class="error-banner">
     <span>{{ errorMessage }}</span>
@@ -29,7 +35,7 @@
   </div>
 
   <div *ngIf="!isLoading && !errorMessage && filteredItems.length === 0" class="empty-state">
-    <p>{{ searchText ? 'No products match your search.' : 'No products available.' }}</p>
+    <p>{{ searchText ? 'No boutique pieces match your search.' : 'No boutique pieces are available right now.' }}</p>
   </div>
 
   <div *ngIf="!isLoading && !errorMessage" class="items-grid">

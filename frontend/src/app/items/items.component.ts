@@ -18,6 +18,15 @@ export class ItemsComponent implements OnInit, OnDestroy {
   items: Product[] = [];
   isLoading = true;
   errorMessage = '';
+  readonly categories = [
+    'Women\'s Fashion',
+    'Handbags',
+    'Jewelry',
+    'Shoes',
+    'Beauty',
+    'Fragrance',
+    'Lifestyle Accessories',
+  ];
 
   private destroy$ = new Subject<void>();
 
@@ -72,14 +81,14 @@ export class ItemsComponent implements OnInit, OnDestroy {
     this.cartService.addItem(item);
     item.quantity = 1;
     item.showQty = true;
-    this.cartService.setToast(`${item.name} added ✅`);
+    this.cartService.setToast(`${item.name} added to your bag ✅`);
   }
 
   increase(item: Product): void {
     const added = this.cartService.increaseItem(item.id);
     if (added) {
       item.quantity = (item.quantity || 0) + 1;
-      this.cartService.setToast(`${item.name} updated ✅`);
+      this.cartService.setToast(`${item.name} updated in your bag ✅`);
     } else {
       this.cartService.setToast(`⚠️ Only ${item.stock} in stock`);
     }
@@ -90,11 +99,11 @@ export class ItemsComponent implements OnInit, OnDestroy {
       this.cartService.removeItem(item.id);
       item.quantity = 0;
       item.showQty = false;
-      this.cartService.setToast(`${item.name} removed ❌`);
+      this.cartService.setToast(`${item.name} removed from your bag ❌`);
     } else if (item.quantity && item.quantity > 1) {
       this.cartService.decreaseItem(item.id);
       item.quantity--;
-      this.cartService.setToast(`${item.name} updated ✅`);
+      this.cartService.setToast(`${item.name} updated in your bag ✅`);
     }
   }
 

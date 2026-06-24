@@ -24,6 +24,71 @@
   z-index: 9999;
 }
 
+.app-footer {
+  margin-top: 48px;
+  padding: 44px 28px 56px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 28px;
+  border-top: 1px solid var(--color-border);
+  background: rgba(255, 250, 244, 0.8);
+  backdrop-filter: blur(14px);
+}
+
+.footer-brand h2 {
+  margin: 8px 0 12px;
+  font-size: clamp(1.6rem, 3vw, 2.3rem);
+}
+
+.footer-eyebrow {
+  margin: 0;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.footer-brand p {
+  max-width: 44rem;
+  margin: 0;
+  color: var(--color-muted);
+  line-height: 1.7;
+}
+
+.footer-links {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.footer-links h3 {
+  margin: 0 0 12px;
+  font-size: 1rem;
+}
+
+.footer-links a {
+  display: block;
+  text-decoration: none;
+  color: var(--color-muted);
+  margin-bottom: 10px;
+}
+
+.footer-links a:hover {
+  color: var(--color-primary);
+}
+
+@media (max-width: 760px) {
+  .app-footer {
+    grid-template-columns: 1fr;
+    padding: 32px 16px 44px;
+  }
+
+  .footer-links {
+    grid-template-columns: 1fr;
+  }
+}
+
 @keyframes toastSlide {
   0% {
     opacity: 0;

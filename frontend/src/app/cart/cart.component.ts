@@ -36,7 +36,7 @@ export class CartComponent implements OnInit {
     const added = this.cartService.increaseItem(item.id);
     if (added) {
       item.quantity = this.cartService.getItemById(item.id)?.quantity ?? item.quantity;
-      this.cartService.setToast(`${item.name} updated ✅`);
+      this.cartService.setToast(`${item.name} updated in your bag ✅`);
     } else {
       this.cartService.setToast(`⚠️ Only ${item.stock} in stock`);
     }
@@ -48,14 +48,14 @@ export class CartComponent implements OnInit {
     } else {
       this.cartService.decreaseItem(item.id);
       item.quantity = this.cartService.getItemById(item.id)?.quantity ?? item.quantity;
-      this.cartService.setToast(`${item.name} updated ✅`);
+      this.cartService.setToast(`${item.name} updated in your bag ✅`);
     }
   }
 
   remove(item: CartItem): void {
     this.cartService.removeItem(item.id);
     this.cartItems = this.cartService.getCartItems();
-    this.cartService.setToast(`${item.name} removed ❌`);
+    this.cartService.setToast(`${item.name} removed from your bag ❌`);
   }
 
   checkout(): void {
