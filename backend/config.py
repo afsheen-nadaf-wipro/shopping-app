@@ -16,6 +16,10 @@ DB_CONFIG = {
     "password": os.getenv("DB_PASSWORD"),
 }
 
+db_sslmode = os.getenv("DB_SSLMODE")
+if db_sslmode:
+    DB_CONFIG["sslmode"] = db_sslmode
+
 # ── JWT ───────────────────────────────────────────────────────────────────────
 
 JWT_SECRET = os.getenv("JWT_SECRET")
