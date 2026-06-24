@@ -13,7 +13,7 @@ logging.basicConfig(
 
 app = Flask(__name__)
 
-CORS(app, resources={r"/*": {"origins": os.getenv("ALLOWED_ORIGINS", "http://localhost:4200")}})
+CORS(app, resources={r"/*": {"origins": os.getenv("ALLOWED_ORIGINS", "https://shopping-app-orcin-rho.vercel.app")}})
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(products_bp)
