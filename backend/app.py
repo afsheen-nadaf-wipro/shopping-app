@@ -13,7 +13,29 @@ logging.basicConfig(
 
 app = Flask(__name__)
 
-CORS(app, resources={r"/*": {"origins": os.getenv("ALLOWED_ORIGINS", "https://shopping-app-orcin-rho.vercel.app")}})
+
+def _allowed_origins() -> list[str] | str:
+    """Return a normalized allowlist for Flask-CORS.
+
+    Supports ALLOWED_ORIGINS as:
+    - single origin: https://example.com
+    - comma-separated origins: https://a.com,https://b.com
+    - wildcard: *
+    """
+    raw = os.getenv("ALLOWED_ORIGINS", "https://shopping-app-orcin-rho.vercel.app").strip()
+    if raw == "*":
+        return "*"
+
+    origins = [origin.strip() for origin in raw.split(",") if origin.strip()]
+    return origins or ["https://shopping-app-orcin-rho.vercel.app"]
+
+
+CORS(
+    app,
+    resources={r"/*": {"origins": _allowed_origins()}},
+    methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allow_headers=["Content-Type", "Authorization"],
+)
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(products_bp)
