@@ -1,6 +1,6 @@
 import os
 import logging
-from urllib.parse import unquote, urlparse
+from urllib.parse import parse_qs, unquote, urlparse
 from dotenv import load_dotenv
 
 load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
@@ -9,10 +9,11 @@ logger = logging.getLogger(__name__)
 
 # ── Database ──────────────────────────────────────────────────────────────────
 
-database_url = os.g/etenv("DATABASE_URL")
+database_url = os.getenv("DATABASE_URL")
 
 if database_url:
     parsed = urlparse(database_url)
+    query = parse_qs(parsed.query or "")
     DB_CONFIG = {
         "host": parsed.hostname or "localhost",
         "port": parsed.port or 5432,
@@ -20,6 +21,10 @@ if database_url:
         "user": unquote(parsed.username) if parsed.username else None,
         "password": unquote(parsed.password) if parsed.password else None,
     }
+
+    # Preserve sslmode from DATABASE_URL query string when present.
+    if query.get("sslmode"):
+        DB_CONFIG["sslmode"] = query["sslmode"][0]
 else:
     DB_CONFIG = {
         "host":     os.getenv("DB_HOST", "localhost"),
