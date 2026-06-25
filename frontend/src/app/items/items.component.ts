@@ -15,6 +15,7 @@ import { Product } from '../models/product.model';
 })
 export class ItemsComponent implements OnInit, OnDestroy {
   searchText = '';
+  selectedCategory = '';
   items: Product[] = [];
   isLoading = true;
   errorMessage = '';
@@ -72,9 +73,52 @@ export class ItemsComponent implements OnInit, OnDestroy {
   }
 
   get filteredItems(): Product[] {
-    return this.items.filter(item =>
-      item.name.toLowerCase().includes(this.searchText.toLowerCase())
-    );
+    const query = this.searchText.trim().toLowerCase();
+
+    return this.items.filter(item => {
+      const categoryMatch = this.selectedCategory
+        ? this.matchesCategory(item, this.selectedCategory)
+        : true;
+
+      if (!categoryMatch) {
+        return false;
+      }
+
+      if (!query) {
+        return true;
+      }
+
+      return (
+        item.name.toLowerCase().includes(query) ||
+        item.description.toLowerCase().includes(query)
+      );
+    });
+  }
+
+  setCategory(category: string): void {
+    this.selectedCategory = this.selectedCategory === category ? '' : category;
+  }
+
+  isCategoryActive(category: string): boolean {
+    return this.selectedCategory === category;
+  }
+
+  private matchesCategory(item: Product, category: string): boolean {
+    const tag = this.extractCategoryTag(item.description);
+    if (!tag) {
+      return false;
+    }
+
+    return this.normalizeCategory(tag) === this.normalizeCategory(category);
+  }
+
+  private extractCategoryTag(description: string): string {
+    const match = description.match(/^\s*\[(.+?)\]/);
+    return match ? match[1] : '';
+  }
+
+  private normalizeCategory(value: string): string {
+    return value.toLowerCase().replace(/[^a-z0-9]/g, '');
   }
 
   addToCart(item: Product): void {

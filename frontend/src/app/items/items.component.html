@@ -9,7 +9,15 @@
 
   <div class="category-strip" aria-label="Product categories">
     @for (category of categories; track category) {
-      <span class="category-chip">{{ category }}</span>
+      <button
+        type="button"
+        class="category-chip"
+        [class.active]="isCategoryActive(category)"
+        [attr.aria-pressed]="isCategoryActive(category)"
+        (click)="setCategory(category)"
+      >
+        {{ category }}
+      </button>
     }
   </div>
 
@@ -35,7 +43,11 @@
   </div>
 
   <div *ngIf="!isLoading && !errorMessage && filteredItems.length === 0" class="empty-state">
-    <p>{{ searchText ? 'No boutique pieces match your search.' : 'No boutique pieces are available right now.' }}</p>
+    <p>
+      {{ (searchText || selectedCategory)
+        ? 'No boutique pieces match your filters.'
+        : 'No boutique pieces are available right now.' }}
+    </p>
   </div>
 
   <div *ngIf="!isLoading && !errorMessage" class="items-grid">
