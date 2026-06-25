@@ -17,6 +17,14 @@ from services.db_utils import (
 
 logger = logging.getLogger(__name__)
 
+
+def _to_iso(value):
+    if value is None:
+        return None
+    if hasattr(value, "isoformat"):
+        return value.isoformat()
+    return str(value)
+
 # ── Constants ─────────────────────────────────────────────────────────────────
 
 VALID_STATUSES = {"PENDING", "PROCESSING", "SHIPPED", "DELIVERED", "CANCELLED"}
@@ -38,7 +46,7 @@ def _serialize_order(row):
         "user_id":      row[1],
         "total_amount": round(float(row[2]), 2),
         "status":       row[3],
-        "created_at":   row[4].isoformat(),
+        "created_at":   _to_iso(row[4]),
     }
 
 
@@ -61,7 +69,7 @@ def _serialize_admin_order(row):
         "customer_email": row[2],
         "total_amount":   round(float(row[3]), 2),
         "status":         row[4],
-        "created_at":     row[5].isoformat(),
+        "created_at":     _to_iso(row[5]),
     }
 
 
@@ -263,7 +271,7 @@ def place_order(user_id, items):
         "user_id":      order[1],
         "total_amount": round(float(order[2]), 2),
         "status":       order[3],
-        "created_at":   order[4].isoformat(),
+        "created_at":   _to_iso(order[4]),
         "items": [
             {
                 "product_id": i["product_id"],
@@ -357,7 +365,7 @@ def get_user_order_history(user_id):
                 "order_id": order_id,
                 "total_amount": round(float(row[1]), 2),
                 "status": row[2],
-                "created_at": row[3].isoformat(),
+                "created_at": _to_iso(row[3]),
                 "items": [],
             }
             orders_by_id[order_id] = order
@@ -575,7 +583,7 @@ def get_admin_order_detail(order_id):
         "id":           order[0],
         "status":       order[5],
         "total_amount": round(float(order[4]), 2),
-        "created_at":   order[6].isoformat(),
+        "created_at":   _to_iso(order[6]),
         "customer": {
             "id":    order[1],
             "name":  order[2],

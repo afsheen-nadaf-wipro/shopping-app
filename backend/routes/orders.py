@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify, g
+import logging
 from middleware.auth_middleware import token_required, admin_required
 from services.order_service import (
     validate_checkout_input, place_order,
@@ -13,6 +14,7 @@ from services.db_utils import (
 )
 
 orders_bp = Blueprint("orders", __name__, url_prefix="/orders")
+logger = logging.getLogger(__name__)
 
 
 @orders_bp.route("/checkout", methods=["POST"])
@@ -33,6 +35,9 @@ def checkout():
         return jsonify({"error": str(e)}), 409
     except ServiceError as e:
         return jsonify({"error": str(e)}), 500
+    except Exception as e:
+        logger.exception("Unexpected error in /orders/checkout: %s", e)
+        return jsonify({"error": "Checkout failed due to an unexpected server error"}), 500
 
     return jsonify({"message": "Order placed successfully", "order": order}), 201
 
@@ -55,6 +60,9 @@ def list_my_orders():
         orders = get_user_order_history(int(g.current_user["id"]))
     except ServiceError as e:
         return jsonify({"error": str(e)}), 500
+    except Exception as e:
+        logger.exception("Unexpected error in /orders/my-orders: %s", e)
+        return jsonify({"error": "Failed to load order history due to an unexpected server error"}), 500
 
     return jsonify({"orders": orders}), 200
 

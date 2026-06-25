@@ -20,6 +20,15 @@ logger = logging.getLogger(__name__)
 _EMAIL_RE = re.compile(r"^[\w\.-]+@[\w\.-]+\.\w{2,}$")
 
 
+def _to_iso(value):
+    """Return ISO-ish string for datetime/date values, passthrough-safe for null/string."""
+    if value is None:
+        return None
+    if hasattr(value, "isoformat"):
+        return value.isoformat()
+    return str(value)
+
+
 # ── Validation ────────────────────────────────────────────────────────────────
 
 def validate_register_input(data):
@@ -108,7 +117,7 @@ def register_user(name, email, password):
         "name":       user[1],
         "email":      user[2],
         "role":       user[3],
-        "created_at": user[4].isoformat(),
+        "created_at": _to_iso(user[4]),
     }
 
 
@@ -260,7 +269,7 @@ def get_profile(user_id):
         "name":       row[1],
         "email":      row[2],
         "role":       row[3],
-        "created_at": row[4].isoformat(),
+        "created_at": _to_iso(row[4]),
     }
 
 
@@ -318,7 +327,7 @@ def update_profile(user_id, fields):
         "name":       row[1],
         "email":      row[2],
         "role":       row[3],
-        "created_at": row[4].isoformat(),
+        "created_at": _to_iso(row[4]),
     }
 
 

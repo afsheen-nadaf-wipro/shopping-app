@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify, g
+import logging
 from middleware.auth_middleware import token_required
 from services.auth_service import (
     validate_register_input, validate_login_input,
@@ -11,6 +12,7 @@ from services.db_utils import (
 )
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth")
+logger = logging.getLogger(__name__)
 
 
 # ── POST /auth/register ───────────────────────────────────────────────────────
@@ -30,6 +32,9 @@ def register():
         return jsonify({"error": str(e)}), 409
     except ServiceError as e:
         return jsonify({"error": str(e)}), 500
+    except Exception as e:
+        logger.exception("Unexpected error in /auth/register: %s", e)
+        return jsonify({"error": "Registration failed due to an unexpected server error"}), 500
 
     return jsonify({"message": "User registered successfully", "user": user}), 201
 
@@ -49,6 +54,9 @@ def login():
         return jsonify({"error": str(e)}), 401
     except ServiceError as e:
         return jsonify({"error": str(e)}), 500
+    except Exception as e:
+        logger.exception("Unexpected error in /auth/login: %s", e)
+        return jsonify({"error": "Login failed due to an unexpected server error"}), 500
 
     return jsonify({"token": token, "user": user}), 200
 
