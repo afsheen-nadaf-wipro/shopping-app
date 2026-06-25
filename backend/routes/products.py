@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+import logging
 from middleware.auth_middleware import admin_required
 from services.product_service import (
     parse_product_filters, get_products, get_product_by_id,
@@ -9,6 +10,7 @@ from services.product_service import (
 from services.db_utils import ServiceError, ValidationError, NotFoundError
 
 products_bp = Blueprint("products", __name__, url_prefix="/products")
+logger = logging.getLogger(__name__)
 
 
 @products_bp.route("", methods=["GET"])
@@ -20,6 +22,9 @@ def list_products():
         return jsonify({"error": str(e)}), 400
     except ServiceError as e:
         return jsonify({"error": str(e)}), 500
+    except Exception as e:
+        logger.exception("Unexpected error in GET /products: %s", e)
+        return jsonify({"error": "Failed to load products due to an unexpected server error"}), 500
 
     limit = filters["limit"]
     return jsonify({

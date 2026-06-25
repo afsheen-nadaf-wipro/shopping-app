@@ -58,6 +58,7 @@
           <input
             type="email"
             [(ngModel)]="email"
+            (ngModelChange)="onEmailChange()"
             #emailModel="ngModel"
             name="email"
             required
@@ -69,6 +70,12 @@
           }
           @if ((submitAttempted || emailModel.touched) && emailModel.errors?.['email']) {
             <span class="field-error">Enter a valid email address.</span>
+          }
+          @if (isCreateAccount && emailAvailabilityMessage) {
+            <span class="field-error field-error-action">
+              {{ emailAvailabilityMessage }}
+              <button type="button" class="field-link" (click)="toggleMode(false)">Sign in</button>
+            </span>
           }
         </label>
 

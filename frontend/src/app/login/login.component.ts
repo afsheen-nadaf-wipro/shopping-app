@@ -16,6 +16,7 @@ export class LoginComponent {
   email = '';
   password = '';
   confirmPassword = '';
+  emailAvailabilityMessage = '';
   errorMessage = '';
   successMessage = '';
   isLoading = false;
@@ -43,11 +44,17 @@ export class LoginComponent {
   toggleMode(createAccount: boolean): void {
     this.isCreateAccount = createAccount;
     this.submitAttempted = false;
+    this.emailAvailabilityMessage = '';
     this.errorMessage = '';
     this.successMessage = '';
   }
 
+  onEmailChange(): void {
+    this.emailAvailabilityMessage = '';
+  }
+
   private onLogin(form: NgForm): void {
+    this.emailAvailabilityMessage = '';
     this.errorMessage = '';
     this.successMessage = '';
 
@@ -80,6 +87,7 @@ export class LoginComponent {
   }
 
   private onRegister(form: NgForm): void {
+    this.emailAvailabilityMessage = '';
     this.errorMessage = '';
     this.successMessage = '';
 
@@ -124,7 +132,8 @@ export class LoginComponent {
         if (err.status === 0) {
           this.errorMessage = 'Cannot reach the server. Please check your connection.';
         } else if (err.status === 409) {
-          this.errorMessage = err.error?.error ?? 'An account with this email already exists.';
+          this.emailAvailabilityMessage = 'This email is already in use. Sign in instead or try a different email address.';
+          this.errorMessage = '';
         } else if (err.status === 400) {
           this.errorMessage = err.error?.error ?? 'Please check your details and try again.';
         } else {

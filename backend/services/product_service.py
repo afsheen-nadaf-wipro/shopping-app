@@ -17,6 +17,14 @@ from services.db_utils import (
 
 logger = logging.getLogger(__name__)
 
+
+def _to_iso(value):
+    if value is None:
+        return None
+    if hasattr(value, "isoformat"):
+        return value.isoformat()
+    return str(value)
+
 # ── Constants ─────────────────────────────────────────────────────────────────
 
 ALLOWED_UPDATE_FIELDS = {"name", "description", "price", "stock", "image_url"}
@@ -44,7 +52,7 @@ def _serialize(row):
         "price":       round(float(row[3]), 2),
         "stock":       row[4],
         "image_url":   row[5],
-        "created_at":  row[6].isoformat(),
+        "created_at":  _to_iso(row[6]),
     }
 
 
