@@ -8,6 +8,16 @@
   </header>
 
   <div class="category-strip" aria-label="Product categories">
+    <button
+      type="button"
+      class="category-chip"
+      [class.active]="isAllActive()"
+      [attr.aria-pressed]="isAllActive()"
+      (click)="showAll()"
+    >
+      All
+    </button>
+
     @for (category of categories; track category) {
       <button
         type="button"

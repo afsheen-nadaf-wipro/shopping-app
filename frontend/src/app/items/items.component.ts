@@ -99,8 +99,21 @@ export class ItemsComponent implements OnInit, OnDestroy {
     this.selectedCategory = this.selectedCategory === category ? '' : category;
   }
 
+  showAll(): void {
+    this.clearFilters();
+  }
+
+  clearFilters(): void {
+    this.selectedCategory = '';
+    this.searchText = '';
+  }
+
   isCategoryActive(category: string): boolean {
     return this.selectedCategory === category;
+  }
+
+  isAllActive(): boolean {
+    return !this.selectedCategory && !this.searchText.trim();
   }
 
   private matchesCategory(item: Product, category: string): boolean {
@@ -118,7 +131,10 @@ export class ItemsComponent implements OnInit, OnDestroy {
   }
 
   private normalizeCategory(value: string): string {
-    return value.toLowerCase().replace(/[^a-z0-9]/g, '');
+    return value
+      .toLowerCase()
+      .replace(/women'?s/g, 'women')
+      .replace(/[^a-z0-9]/g, '');
   }
 
   addToCart(item: Product): void {
